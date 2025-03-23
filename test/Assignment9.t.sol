@@ -6,9 +6,11 @@ import {Assignment9, SimpleContract} from "../src/Assignment9.sol";
 
 contract Assignment9Test is Test {
     Assignment9 assignment;
+    address owner = address(this); // Test contract as owner
 
     function setUp() public {
         assignment = new Assignment9();
+        assertEq(assignment.owner(), owner, "Owner should be test contract");
     }
 
     function testFactoryPattern() public {
@@ -24,7 +26,7 @@ contract Assignment9Test is Test {
 
     function testOnlyOwnerCanCreateContract() public {
         vm.prank(address(0x1234));
-        vm.expectRevert();
+        vm.expectRevert("Ownable: caller is not the owner");
         assignment.createContract();
     }
 }
